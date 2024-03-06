@@ -36,7 +36,7 @@ const Coin = styled.li`
 
 const Title = styled.h1`
   font-size: 48px;
-  color: ${(props) => props.theme.textColor};
+  color: ${(props) => props.theme.title};
 `;
 
 const Loader = styled.span`
@@ -113,7 +113,7 @@ const Coins = () => {
         ) : (
           coins.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`} state={{name:coin.name}}>
+              <Link to={`/${coin.id}`} state={{ name: coin.name }}>
                 <Img
                   src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
                 />

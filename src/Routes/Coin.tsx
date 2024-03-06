@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
-import { Route, Routes, useLocation, useParams } from "react-router-dom";
+import {
+  Link,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import styled from "styled-components";
-import Price from './Price';
-import Chart from './Chart';
+import Price from "./Price";
+import Chart from "./Chart";
 
 interface RouteParams {
   coinId: string;
@@ -22,7 +29,7 @@ const Header = styled.header`
 
 const Title = styled.h1`
   font-size: 48px;
-  color: ${(props) => props.theme.textColor};
+  color: ${(props) => props.theme.title};
 `;
 
 const Loader = styled.span`
@@ -54,6 +61,24 @@ const OverviewItem = styled.div`
 
 const Description = styled.p`
   margin: 20px 10px;
+`;
+
+const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 20px 0;
+`;
+const Tab = styled.span`
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  padding: 10px 20px;
+  text-align: center;
+  font-weight: 12px;
+  font-weight: 400;
+  a {
+    display: block;
+  }
 `;
 
 interface InfoData {
@@ -165,10 +190,16 @@ const Coin = () => {
               <span>{prieInfo?.max_supply}</span>
             </OverviewItem>
           </Overview>
-          <Routes>
-            <Route path={`/${coinId}/price`} element={<Price/>}/>
-            <Route path={`/${coinId}/chart`} element={<Chart/>}/>
-          </Routes>
+
+          <Tabs>
+            <Tab>
+              <Link to={`/${coinId}/chart`}>Price</Link>
+            </Tab>
+            <Tab>
+              <Link to={`/${coinId}/price`}>Chart</Link>
+            </Tab>
+          </Tabs>
+          <Outlet />
         </>
       )}
     </Container>
