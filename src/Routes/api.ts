@@ -4,4 +4,4 @@ async function fetchCoins() {
   );
 }
 
-export default { fetchCoins };
+export default  fetchCoins ;

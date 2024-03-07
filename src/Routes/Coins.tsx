@@ -92,7 +92,7 @@ interface ICoin {
 }
 
 const Coins = () => {
-  const { isLoading, data } = useQuery<ICoin[]>({
+  const { isLoading, data, error } = useQuery<ICoin>({
     queryKey: ["repoData"],
     queryFn: fetchCoins,
   });
@@ -109,7 +109,9 @@ const Coins = () => {
   //   })();
   // }, []);
   // console.log(coins);
-
+  if (error) {
+    return <div>err</div>;
+  }
   return (
     <Container>
       <Header>
