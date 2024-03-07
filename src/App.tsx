@@ -1,9 +1,8 @@
 import React from "react";
 import Router from "./Router";
 import { createGlobalStyle } from "styled-components";
-const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap')
 
+const GlobalStyle = createGlobalStyle`
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -52,13 +51,13 @@ table {
   box-sizing:border-box
 }
 body{
-  font-family: "Source Sans 3", sans-serif;
+	font-family: "Cute Font", sans-serif;
   background-color:${(props) => props.theme.bgColor};
   color:${(props) => props.theme.textColor}
 }
 a{
   text-decoration:none;
-  color:inherit
+  color:inherit;
 }
 `;
 

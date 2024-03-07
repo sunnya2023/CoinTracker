@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import fetchCoins from "./api";
 
 const Container = styled.div`
   padding: 0 20px;
@@ -79,7 +81,7 @@ const Img = styled.img`
 //   },
 // ];
 
-interface CoinInterface {
+interface ICoin {
   id: string;
   name: string;
   symbol: string;
@@ -89,29 +91,34 @@ interface CoinInterface {
   type: string;
 }
 const Coins = () => {
-  const [coins, setCoins] = useState<CoinInterface[]>([]);
-  const [loading, setLoading] = useState(true);
-  const url = `https://api.coinpaprika.com/v1/coins`;
-  useEffect(() => {
-    (async () => {
-      const respons = await fetch(url);
-      const json = await respons.json();
-      //   console.log(json);
-      setCoins(json.slice(0, 100));
-      setLoading(false);
-    })();
-  }, []);
-  console.log(coins);
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["repoData"],
+    queryFn: fetchCoins,
+  });
+  // const [coins, setCoins] = useState<CoinInterface[]>([]);
+  // const [loading, setLoading] = useState(true);
+  // const url = `https://api.coinpaprika.com/v1/coins`;
+  // useEffect(() => {
+  //   (async () => {
+  //     const respons = await fetch(url);
+  //     const json = await respons.json();
+  //     //   console.log(json);
+  //     setCoins(json.slice(0, 100));
+  //     setLoading(false);
+  //   })();
+  // }, []);
+  // console.log(coins);
+
   return (
     <Container>
       <Header>
         <Title>코인</Title>
       </Header>
       <CoinList>
-        {loading ? (
+        {isLoading ? (
           <Loader>Loading...</Loader>
         ) : (
-          coins.map((coin) => (
+          data?.map((coin) => (
             <Coin key={coin.id}>
               <Link to={`/${coin.id}`} state={{ name: coin.name }}>
                 <Img

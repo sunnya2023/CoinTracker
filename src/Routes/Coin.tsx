@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import {
   Link,
   Outlet,
-  Route,
-  Routes,
   useLocation,
+  useMatch,
   useParams,
 } from "react-router-dom";
 import styled from "styled-components";
@@ -69,14 +68,16 @@ const Tabs = styled.div`
   gap: 10px;
   margin: 20px 0;
 `;
-const Tab = styled.span`
+const Tab = styled.span<{ $isAcive: boolean }>`
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 15px;
   padding: 10px 20px;
   text-align: center;
   font-weight: 12px;
   font-weight: 400;
-  a {
+  color: ${(props) =>
+      props.$isAcive ? props.theme.accentColor : props.theme.textColor}
+    a {
     display: block;
   }
 `;
@@ -140,6 +141,9 @@ const Coin = () => {
   const { state } = useLocation();
   const [info, setInfo] = useState<InfoData>();
   const [prieInfo, setPriceInfo] = useState<PriceData>();
+  const priceMatch = useMatch("/:coinId/price");
+  const chartMatch = useMatch("`/:coinId/chart");
+
   const url = `https://api.coinpaprika.com/v1/coins/${coinId}`;
   const urlPrice = `https://api.coinpaprika.com/v1/tickers/${coinId}`;
   useEffect(() => {
@@ -192,11 +196,11 @@ const Coin = () => {
           </Overview>
 
           <Tabs>
-            <Tab>
-              <Link to={`/${coinId}/chart`}>Price</Link>
+            <Tab $isAcive={chartMatch !== null}>
+              <Link to={`/${coinId}/chart`}>Chart</Link>
             </Tab>
-            <Tab>
-              <Link to={`/${coinId}/price`}>Chart</Link>
+            <Tab $isAcive={priceMatch !== null}>
+              <Link to={`/${coinId}/price`}>Price</Link>
             </Tab>
           </Tabs>
           <Outlet />
