@@ -90,8 +90,9 @@ interface ICoin {
   is_active: boolean;
   type: string;
 }
+
 const Coins = () => {
-  const { isLoading, error, data } = useQuery({
+  const { isLoading, data } = useQuery<ICoin[]>({
     queryKey: ["repoData"],
     queryFn: fetchCoins,
   });
@@ -118,7 +119,7 @@ const Coins = () => {
         {isLoading ? (
           <Loader>Loading...</Loader>
         ) : (
-          data?.map((coin) => (
+          data?.slice(0, 100).map((coin) => (
             <Coin key={coin.id}>
               <Link to={`/${coin.id}`} state={{ name: coin.name }}>
                 <Img
