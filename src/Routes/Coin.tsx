@@ -10,7 +10,8 @@ import styled from "styled-components";
 import Price from "./Price";
 import Chart from "./Chart";
 import { useQuery } from "@tanstack/react-query";
-import { fetchCoinInfo } from "./api";
+import { fetchCoinInfo, fetchCoinTickers } from "./api";
+import { Helmet } from "react-helmet-async";
 
 interface RouteParams {
   coinId: string;
@@ -29,6 +30,7 @@ const Header = styled.header`
 `;
 
 const Title = styled.h1`
+  margin-bottom: 20px;
   font-size: 48px;
   color: ${(props) => props.theme.title};
 `;
@@ -140,21 +142,22 @@ interface PriceData {
 const Coin = () => {
   const { coinId } = useParams<keyof RouteParams>();
   const { state } = useLocation();
+  const priceMatch = useMatch("/:coinId/price");
+  const chartMatch = useMatch("`/:coinId/chart");
 
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>({
     queryKey: ["info", coinId],
-    queryFn: () => fetchCoinInfo(coinId),
+    queryFn: () => fetchCoinInfo(coinId!),
   });
   const { isLoading: tickerLoading, data: tickersData } = useQuery<PriceData>({
     queryKey: ["tickers", coinId],
-    queryFn: () => fetchCoinInfo(coinId),
+    queryFn: () => fetchCoinTickers(coinId!),
+    refetchInterval: 500,
   });
-
+  console.log(tickersData);
   // const [loading, setLoading] = useState(true);
   // const [info, setInfo] = useState<InfoData>();
   // const [tickersData, setPriceInfo] = useState<PriceData>();
-  // const priceMatch = useMatch("/:coinId/price");
-  // const chartMatch = useMatch("`/:coinId/chart");
 
   // const url = `https://api.coinpaprika.com/v1/coins/${coinId}`;
   // const urlPrice = `https://api.coinpaprika.com/v1/tickers/${coinId}`;
@@ -172,6 +175,11 @@ const Coin = () => {
   const loading = infoLoading || tickerLoading;
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+        </title>
+      </Helmet>
       <Header>
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
@@ -191,8 +199,9 @@ const Coin = () => {
               <span>{infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>OPEN SOURCE:</span>
-              <span>{infoData?.open_source}</span>
+              <span>Price:</span>
+              <span>${tickersData?.quotes.USD.price.toFixed(3)}</span>
+              {/* <span>$</span> */}
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>
@@ -207,15 +216,15 @@ const Coin = () => {
             </OverviewItem>
           </Overview>
 
-          {/* <Tabs>
+          <Tabs>
             <Tab $isAcive={chartMatch !== null}>
-              <Link to={`/${coinId}/chart`}>Chart</Link>
+              <Link to={`/${coinId}/chart`}>chart</Link>
             </Tab>
             <Tab $isAcive={priceMatch !== null}>
-              <Link to={`/${coinId}/price`}>Price</Link>
+              <Link to={`/${coinId}/price`}>price</Link>
             </Tab>
           </Tabs>
-          <Outlet /> */}
+          <Outlet context={{ coinId }} />
         </>
       )}
     </Container>

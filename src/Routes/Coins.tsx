@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import fetchCoins from "./api";
+import { Helmet } from "react-helmet-async";
 
 const Container = styled.div`
   padding: 0 20px;
@@ -37,6 +38,7 @@ const Coin = styled.li`
 `;
 
 const Title = styled.h1`
+  margin-bottom: 20px;
   font-size: 48px;
   color: ${(props) => props.theme.title};
 `;
@@ -95,6 +97,7 @@ const Coins = () => {
   const { isLoading, data } = useQuery<ICoin>({
     queryKey: ["allCoins"],
     queryFn: fetchCoins,
+    refetchInterval: 10000,
   });
   // const [coins, setCoins] = useState<CoinInterface[]>([]);
   // const [loading, setLoading] = useState(true);
@@ -114,6 +117,9 @@ const Coins = () => {
   // }
   return (
     <Container>
+      <Helmet>
+        <title>코인</title>
+      </Helmet>
       <Header>
         <Title>코인</Title>
       </Header>
