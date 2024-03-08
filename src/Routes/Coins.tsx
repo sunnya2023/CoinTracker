@@ -92,8 +92,8 @@ interface ICoin {
 }
 
 const Coins = () => {
-  const { isLoading, data, error } = useQuery<ICoin>({
-    queryKey: ["repoData"],
+  const { isLoading, data } = useQuery<ICoin>({
+    queryKey: ["allCoins"],
     queryFn: fetchCoins,
   });
   // const [coins, setCoins] = useState<CoinInterface[]>([]);
@@ -109,9 +109,9 @@ const Coins = () => {
   //   })();
   // }, []);
   // console.log(coins);
-  if (error) {
-    return <div>err</div>;
-  }
+  // if (error) {
+  //   return <div>err</div>;
+  // }
   return (
     <Container>
       <Header>

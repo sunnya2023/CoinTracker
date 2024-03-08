@@ -9,6 +9,8 @@ import {
 import styled from "styled-components";
 import Price from "./Price";
 import Chart from "./Chart";
+import { useQuery } from "@tanstack/react-query";
+import { fetchCoinInfo } from "./api";
 
 interface RouteParams {
   coinId: string;
@@ -137,32 +139,42 @@ interface PriceData {
 }
 const Coin = () => {
   const { coinId } = useParams<keyof RouteParams>();
-  const [loading, setLoading] = useState(true);
   const { state } = useLocation();
-  const [info, setInfo] = useState<InfoData>();
-  const [prieInfo, setPriceInfo] = useState<PriceData>();
-  const priceMatch = useMatch("/:coinId/price");
-  const chartMatch = useMatch("`/:coinId/chart");
 
-  const url = `https://api.coinpaprika.com/v1/coins/${coinId}`;
-  const urlPrice = `https://api.coinpaprika.com/v1/tickers/${coinId}`;
-  useEffect(() => {
-    (async () => {
-      const infoData = await (await fetch(url)).json();
-      const priceData = await (await fetch(urlPrice)).json();
-      console.log(infoData);
-      console.log(priceData);
-      setInfo(infoData);
-      setPriceInfo(priceData);
-      setLoading(false);
-    })();
-  }, []);
+  const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>({
+    queryKey: ["info", coinId],
+    queryFn: () => fetchCoinInfo(coinId),
+  });
+  const { isLoading: tickerLoading, data: tickersData } = useQuery<PriceData>({
+    queryKey: ["tickers", coinId],
+    queryFn: () => fetchCoinInfo(coinId),
+  });
 
+  // const [loading, setLoading] = useState(true);
+  // const [info, setInfo] = useState<InfoData>();
+  // const [tickersData, setPriceInfo] = useState<PriceData>();
+  // const priceMatch = useMatch("/:coinId/price");
+  // const chartMatch = useMatch("`/:coinId/chart");
+
+  // const url = `https://api.coinpaprika.com/v1/coins/${coinId}`;
+  // const urlPrice = `https://api.coinpaprika.com/v1/tickers/${coinId}`;
+  // useEffect(() => {
+  //   (async () => {
+  //     const infoData = await (await fetch(url)).json();
+  //     const priceData = await (await fetch(urlPrice)).json();
+  //     console.log(infoData);
+  //     console.log(priceData);
+  //     setInfo(infoData);
+  //     setPriceInfo(priceData);
+  //     setLoading(false);
+  //   })();
+  // }, []);
+  const loading = infoLoading || tickerLoading;
   return (
     <Container>
       <Header>
         <Title>
-          {state?.name ? state.name : loading ? "Loading..." : info?.name}
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
       </Header>
       {loading ? (
@@ -172,30 +184,30 @@ const Coin = () => {
           <Overview>
             <OverviewItem>
               <span>RANK:</span>
-              <span>{info?.rank}</span>
+              <span>{infoData?.rank}</span>
             </OverviewItem>
             <OverviewItem>
               <span>SYMBOL:</span>
-              <span>{info?.symbol}</span>
+              <span>{infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
               <span>OPEN SOURCE:</span>
-              <span>{info?.open_source}</span>
+              <span>{infoData?.open_source}</span>
             </OverviewItem>
           </Overview>
-          <Description>{info?.description}</Description>
+          <Description>{infoData?.description}</Description>
           <Overview>
             <OverviewItem>
               <span>TOTAL SUPLY:</span>
-              <span>{prieInfo?.total_supply}</span>
+              <span>{tickersData?.total_supply}</span>
             </OverviewItem>
             <OverviewItem>
               <span>MAX SUPLY:</span>
-              <span>{prieInfo?.max_supply}</span>
+              <span>{tickersData?.max_supply}</span>
             </OverviewItem>
           </Overview>
 
-          <Tabs>
+          {/* <Tabs>
             <Tab $isAcive={chartMatch !== null}>
               <Link to={`/${coinId}/chart`}>Chart</Link>
             </Tab>
@@ -203,7 +215,7 @@ const Coin = () => {
               <Link to={`/${coinId}/price`}>Price</Link>
             </Tab>
           </Tabs>
-          <Outlet />
+          <Outlet /> */}
         </>
       )}
     </Container>
