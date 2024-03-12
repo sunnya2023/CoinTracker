@@ -152,7 +152,7 @@ const Coin = () => {
   const { isLoading: tickerLoading, data: tickersData } = useQuery<PriceData>({
     queryKey: ["tickers", coinId],
     queryFn: () => fetchCoinTickers(coinId!),
-    refetchInterval: 500,
+    // refetchInterval: 500,
   });
   console.log(tickersData);
   // const [loading, setLoading] = useState(true);

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Router from "./Router";
-import { createGlobalStyle } from "styled-components";
+import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { HelmetProvider } from 'react-helmet-async';
-
-
+import { HelmetProvider } from "react-helmet-async";
+import { lightTheme, darkTheme } from "./theme";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "./atoms";
 
 const GlobalStyle = createGlobalStyle`
 
@@ -66,12 +67,15 @@ a{
 `;
 
 function App() {
+  const isDark = useRecoilValue(isDarkAtom);
   return (
     <>
       <HelmetProvider>
-      	<GlobalStyle />
-	      <Router />
-	      <ReactQueryDevtools initialIsOpen={true} />
+        <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+          <GlobalStyle />
+          <Router />
+          <ReactQueryDevtools initialIsOpen={true} />
+        </ThemeProvider>
       </HelmetProvider>
     </>
   );

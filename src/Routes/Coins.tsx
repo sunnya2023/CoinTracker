@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useOutlet,
+  useOutletContext,
+  useSearchParams,
+} from "react-router-dom";
 import styled from "styled-components";
 import fetchCoins from "./api";
 import { Helmet } from "react-helmet-async";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 const Container = styled.div`
   padding: 0 20px;
@@ -20,7 +27,7 @@ const CoinList = styled.ul``;
 
 const Coin = styled.li`
   background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor};
   padding: 20px;
   border-radius: 15px;
   margin-bottom: 10px;
@@ -115,6 +122,8 @@ const Coins = () => {
   // if (error) {
   //   return <div>err</div>;
   // }
+  const setterFn = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setterFn((prev) => !prev);
   return (
     <Container>
       <Helmet>
@@ -122,6 +131,7 @@ const Coins = () => {
       </Helmet>
       <Header>
         <Title>코인</Title>
+        <button onClick={toggleDarkAtom}>Toggle Mode</button>
       </Header>
       <CoinList>
         {isLoading ? (
