@@ -191,9 +191,10 @@ const Coin = () => {
           <BackBtn onClick={() => navigate("/")}>
             <IoChevronBack />
           </BackBtn>
-          <Title>{state?.name || "Loading..."}</Title>
+          <Title>
+            {loading ? <Loader>Loading...</Loader> : infoData?.name}
+          </Title>
         </Header>
-        {loading ? <Loader>Loading...</Loader> : infoData?.name}
 
         <Overview>
           <OverviewItem>
