@@ -23,7 +23,7 @@ const CoinList = styled.ul``;
 
 const Coin = styled.li`
   background-color: white;
-  /* color: ${(props) => props.theme.textColor}; */
+  color: ${(props) => props.theme.textColor};
   padding: 20px;
   border-radius: 15px;
   margin-bottom: 10px;
@@ -33,13 +33,15 @@ const Coin = styled.li`
     transition: color 0.5s ease-in-out;
     display: flex;
     align-items: center;
-    color: ${(props) => props.theme.textColor};
   }
   &:hover {
     a {
       color: ${(props) => props.theme.accentColor};
     }
   }
+`;
+const Text = styled.span`
+  color: ${(props) => props.theme.textColor};
 `;
 const Title = styled.h1`
   font-size: 48px;
@@ -103,7 +105,7 @@ const Coins = () => {
                     src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
                     alt="아이콘 이미지"
                   />
-                  {coin.name} &rarr;
+                  <Text>{coin.name} &rarr</Text>;
                 </Link>
               </Coin>
             ))}
