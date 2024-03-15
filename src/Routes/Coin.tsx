@@ -23,7 +23,6 @@ const Header = styled.header`
   height: 10vh;
   display: flex;
   align-items: center;
-  /* justify-content: center; */
   margin: 20px;
   position: relative;
 `;
@@ -56,7 +55,7 @@ const Loader = styled.span`
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: white;
   padding: 10px 20px;
   border-radius: 10px;
 `;
@@ -64,8 +63,9 @@ const OverviewItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: white;
   color: ${(props) => props.theme.textColor};
-  span:first-chile {
+  span:first-child {
     font-size: 10px;
     font-weight: 400;
     text-transform: uppercase;
@@ -75,6 +75,9 @@ const OverviewItem = styled.div`
 const Description = styled.p`
   margin: 20px 0px;
   color: ${(props) => props.theme.textColor};
+  background-color: white;
+  border-radius: 15px;
+  padding: 10px;
 `;
 
 const Tabs = styled.div`
@@ -84,7 +87,7 @@ const Tabs = styled.div`
   margin: 20px 0;
 `;
 const Tab = styled.span<{ isActive: boolean }>`
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: white;
   border-radius: 15px;
   padding: 10px 20px;
   text-align: center;
@@ -95,6 +98,7 @@ const Tab = styled.span<{ isActive: boolean }>`
     display: block;
     color: ${(props) =>
       props.isActive ? props.theme.accentColor : props.theme.textColor};
+    font-weight: ${(props) => (props.isActive ? 600 : 400)};
   }
 `;
 
@@ -192,7 +196,8 @@ const Coin = () => {
             <IoChevronBack />
           </BackBtn>
           <Title>
-            {state?.name || "Coin detail"}
+            {state?.name ? state.name : loading ? "로딩 중..." : infoData?.name}
+
             {/* {loading ? <Loader>Loading...</Loader> : infoData?.name} */}
           </Title>
         </Header>
