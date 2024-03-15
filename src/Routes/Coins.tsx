@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { fetchCoins } from "../api";
 import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isDarkAtom } from "../atoms";
 import { Switch } from "@mui/material";
 
@@ -23,15 +23,17 @@ const CoinList = styled.ul``;
 
 const Coin = styled.li`
   background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  /* color: ${(props) => props.theme.textColor}; */
   padding: 20px;
   border-radius: 15px;
   margin-bottom: 10px;
+  border: 1px solid ${(props) => props.theme.bgColor};
   a {
     padding: 20px;
     transition: color 0.5s ease-in-out;
     display: flex;
     align-items: center;
+    color: ${(props) => props.theme.textColor};
   }
   &:hover {
     a {
@@ -66,6 +68,7 @@ interface ICoins {
   type: string;
 }
 const Coins = () => {
+  const isDark = useRecoilValue(isDarkAtom);
   const setterFn = useSetRecoilState(isDarkAtom);
   const { isLoading, data } = useQuery<ICoins[]>({
     queryKey: ["allCoins"],
