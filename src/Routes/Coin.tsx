@@ -192,7 +192,8 @@ const Coin = () => {
             <IoChevronBack />
           </BackBtn>
           <Title>
-            {loading ? <Loader>Loading...</Loader> : infoData?.name}
+            {state?.name || "Coin detail"}
+            {/* {loading ? <Loader>Loading...</Loader> : infoData?.name} */}
           </Title>
         </Header>
 
